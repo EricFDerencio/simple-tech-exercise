@@ -91,4 +91,36 @@ const addToCart = () => {
   throw new Error("MÉTODO NÃO IMPLEMENTADO!!!!!");
 };
 
+
 /* Buscar produtos e exibir em tela */
+async function getProducts() {
+  try {
+    const response = await fetch('../products.json'); // Faz o fetch do arquivo JSON
+    if (!response.ok) {
+      throw new Error('Erro ao carregar o arquivo JSON');
+    }
+    const productsArray = await response.json(); // Converte o conteúdo para um array de objetos
+    console.log(productsArray); // Exibe o array no console (apenas para debug)
+    return productsArray; // Retorna o array de objetos
+  } catch (error) {
+    console.error('Erro:', error);
+    return []; // Retorna um array vazio em caso de erro
+  }
+}
+
+function showProductScreen() {
+  getProducts()
+  .then(products =>{
+    let destino = document.getElementById("products-container");
+
+    products.forEach(product => {
+      let productCard = createProductCard(product);
+      destino.appendChild(productCard);
+    });
+  })
+  .catch(error => {
+    console.error("Erro ao carregar os produtos:", error);
+  });
+}
+showProductScreen()
+
