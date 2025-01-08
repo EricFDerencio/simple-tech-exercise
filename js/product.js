@@ -86,4 +86,30 @@ const addToCart = () => {
   throw new Error("MÉTODO NÃO IMPLEMENTADO!!!!!");
 };
 
+
+import { getProducts } from "./scripts.js"; // Ajuste o caminho de acordo com sua estrutura de pastas
+
+const params = new URLSearchParams(window.location.search);
+const returnId = params.get("productId");
+
+function showProductScreen() {
+  getProducts()
+    .then((products) => {
+      const destino = document.querySelector(".product-container");
+
+      const product = products.find((item) => item.id === parseInt(returnId)); // Certifique-se de que os tipos sejam compatíveis
+      if (product) {
+        const productCard = createProductDetailsWithImage(product);
+        destino.appendChild(productCard);
+      } else {
+        console.error("Produto não encontrado para o ID:", returnId);
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao carregar os produtos:", error);
+    });
+}
+
+showProductScreen();
+
 /* Implementar lógica para buscar o produto pelo id e chamar a função para colocar ele em tela. */

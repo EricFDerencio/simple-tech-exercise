@@ -11,8 +11,10 @@ function createProductCard({
 }) {
   const colDiv = document.createElement("div");
   colDiv.className = "col mb-5";
-
-  /* Quero adicionar um onclick na div pai de todos (a colDiv) um onClick para me redirecionar para a tela de produto */
+  colDiv.style = "cursor: pointer";  //editar o padding da div por uma margin para ajustar o espaço do click do mouse
+  colDiv.onclick = function () {
+    window.location.href = `../product.html?productId=${id}`;
+  };
 
   const cardDiv = document.createElement("div");
   cardDiv.className = "card h-100";
@@ -61,6 +63,7 @@ function createProductCard({
 
   const button = document.createElement("button");
   button.className = "btn btn-outline-dark mt-auto";
+
   /* MÉTODO PARA ADICIONAR AO CARRINHO */
   button.onclick = () => addToCart(id);
   button.textContent = buttonText;
@@ -93,7 +96,7 @@ const addToCart = () => {
 
 
 /* Buscar produtos e exibir em tela */
-async function getProducts() {
+export async function getProducts() {
   try {
     const response = await fetch('../products.json'); // Faz o fetch do arquivo JSON
     if (!response.ok) {
@@ -122,5 +125,4 @@ function showProductScreen() {
     console.error("Erro ao carregar os produtos:", error);
   });
 }
-showProductScreen()
-
+showProductScreen();
