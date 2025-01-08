@@ -65,7 +65,10 @@ function createProductCard({
   button.className = "btn btn-outline-dark mt-auto";
 
   /* MÉTODO PARA ADICIONAR AO CARRINHO */
-  button.onclick = () => addToCart(id);
+  button.onclick = (event) => {
+    event.stopPropagation(); // Impede que o clique propague para o colDiv
+    addToCart(id);
+  };
   button.textContent = buttonText;
 
   textCenterDiv.appendChild(productNameH5);
@@ -89,10 +92,38 @@ function createProductCard({
 }
 
 /* IMPLEMENTAR MÉTODO DE ADICIONAR AO CARRINHO */
-const addToCart = () => {
-  alert("MÉTODO NÃO IMPLEMENTADO!!!!!");
-  throw new Error("MÉTODO NÃO IMPLEMENTADO!!!!!");
-};
+function addToCart(id) {
+  getProducts()
+    .then((products) => {
+      const product = products.find((item) => item.id === id); // Busca o produto pelo ID
+
+      if (product) {
+        // Obtém o carrinho do localStorage (ou cria um novo array vazio)
+        let cartList = JSON.parse(localStorage.getItem("cartList")) || [];
+
+        // Verifica se o produto já está no carrinho
+        const isProductInCart = cartList.some((item) => item.id === id);
+        if (isProductInCart) {
+          alert("O produto já está no carrinho!");
+          return;
+        }
+
+        // Adiciona o produto ao carrinho
+        cartList.push(product);
+
+        // Salva o carrinho atualizado no localStorage
+        localStorage.setItem("cartList", JSON.stringify(cartList));
+
+        alert("Produto adicionado ao carrinho com sucesso!");
+      } else {
+        alert("Produto não encontrado!");
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao adicionar o produto ao carrinho:", error);
+      alert("Ocorreu um erro ao adicionar o produto ao carrinho.");
+    });
+}
 
 
 /* Buscar produtos e exibir em tela */
@@ -103,7 +134,6 @@ export async function getProducts() {
       throw new Error('Erro ao carregar o arquivo JSON');
     }
     const productsArray = await response.json(); // Converte o conteúdo para um array de objetos
-    console.log(productsArray); // Exibe o array no console (apenas para debug)
     return productsArray; // Retorna o array de objetos
   } catch (error) {
     console.error('Erro:', error);
@@ -126,3 +156,4 @@ function showProductScreen() {
   });
 }
 showProductScreen();
+

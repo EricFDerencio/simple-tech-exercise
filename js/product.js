@@ -91,13 +91,13 @@ import { getProducts } from "./scripts.js"; // Ajuste o caminho de acordo com su
 
 const params = new URLSearchParams(window.location.search);
 const returnId = params.get("productId");
-
+/* Implementar lógica para buscar o produto pelo id e chamar a função para colocar ele em tela. */
 function showProductScreen() {
   getProducts()
     .then((products) => {
       const destino = document.querySelector(".product-container");
 
-      const product = products.find((item) => item.id === parseInt(returnId)); // Certifique-se de que os tipos sejam compatíveis
+      const product = products.find((item) => item.id === parseInt(returnId)); 
       if (product) {
         const productCard = createProductDetailsWithImage(product);
         destino.appendChild(productCard);
@@ -112,4 +112,3 @@ function showProductScreen() {
 
 showProductScreen();
 
-/* Implementar lógica para buscar o produto pelo id e chamar a função para colocar ele em tela. */
