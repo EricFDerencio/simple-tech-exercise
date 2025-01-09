@@ -60,9 +60,7 @@ function createProductDetailsWithImage(product) {
   const addToCartButton = document.createElement("button");
   addToCartButton.className = "btn btn-outline-dark flex-shrink-0";
   addToCartButton.type = "button";
-
-  /* Implementar Metodo */
-  addToCartButton.onclick = () => addToCart();
+  addToCartButton.onclick = () => addToCart(product.id);
 
   const cartIcon = document.createElement("i");
   cartIcon.className = "bi-cart-fill me-1";
@@ -81,11 +79,47 @@ function createProductDetailsWithImage(product) {
 }
 
 /* IMPLEMENTAR MÉTODO DE ADICIONAR AO CARRINHO */
-const addToCart = () => {
-  alert("MÉTODO NÃO IMPLEMENTADO!!!!!");
-  throw new Error("MÉTODO NÃO IMPLEMENTADO!!!!!");
+const addToCart = (productId) => {
+  const quantityInput = document.querySelector("#inputQuantity");
+  const quantity = parseInt(quantityInput.value);
+
+  if (isNaN(quantity) || quantity <= 0) {
+    alert("Por favor, insira uma quantidade válida.");
+    return;
+  }
+
+  getProducts()
+    .then((products) => {
+      const product = products.find((item) => item.id === productId);
+
+      if (product) {
+        // Aqui você pode criar ou atualizar a lógica para armazenar o carrinho
+        const cart = JSON.parse(localStorage.getItem("cartList")) || [];
+
+        const existingProduct = cart.find((item) => item.id === product.id);
+
+        if (existingProduct) {
+          existingProduct.quantity += quantity;
+        } else {
+          cart.push({
+            ...product,
+            quantity,
+          });
+        }
+
+        localStorage.setItem("cartList", JSON.stringify(cart));
+        updateCartCounter();
+        alert(`Adicionado ${quantity} unidade(s) de "${product.productName}" ao carrinho!`);
+      } else {
+        console.error("Produto não encontrado para o ID:", productId);
+      }
+    })
+    .catch((error) => {
+      console.error("Erro ao adicionar ao carrinho:", error);
+    });
 };
 
+import {updateCartCounter} from "./scripts.js";
 
 import { getProducts } from "./scripts.js"; // Ajuste o caminho de acordo com sua estrutura de pastas
 
@@ -111,4 +145,5 @@ function showProductScreen() {
 }
 
 showProductScreen();
+updateCartCounter();
 

@@ -95,26 +95,24 @@ function createProductCard({
 function addToCart(id) {
   getProducts()
     .then((products) => {
-      const product = products.find((item) => item.id === id); // Busca o produto pelo ID
+      const product = products.find((item) => item.id === id);
 
       if (product) {
-        // Obtém o carrinho do localStorage (ou cria um novo array vazio)
         let cartList = JSON.parse(localStorage.getItem("cartList")) || [];
+        const existingProduct = cartList.find((item) => item.id === id);
 
-        // Verifica se o produto já está no carrinho
-        const isProductInCart = cartList.some((item) => item.id === id);
-        if (isProductInCart) {
-          alert("O produto já está no carrinho!");
-          return;
+        if (existingProduct) {
+          // Incrementa a quantidade do produto existente
+          existingProduct.quantity += 1;
+        } else {
+          // Adiciona o novo produto com quantidade 1
+          product.quantity = 1;
+          cartList.push(product);
         }
 
-        // Adiciona o produto ao carrinho
-        cartList.push(product);
-
-        // Salva o carrinho atualizado no localStorage
         localStorage.setItem("cartList", JSON.stringify(cartList));
-
         alert("Produto adicionado ao carrinho com sucesso!");
+        updateCartCounter(); // Atualiza o contador
       } else {
         alert("Produto não encontrado!");
       }
@@ -125,6 +123,12 @@ function addToCart(id) {
     });
 }
 
+export function updateCartCounter() {
+  const cartList = JSON.parse(localStorage.getItem("cartList")) || [];
+  const cartCount = cartList.length; // Conta o número de itens no carrinho
+  const cartCounterSpan = document.querySelector("#button-cart .badge"); // Seleciona o span
+  cartCounterSpan.textContent = cartCount; // Atualiza o número exibido
+}
 
 /* Buscar produtos e exibir em tela */
 export async function getProducts() {
@@ -156,4 +160,4 @@ function showProductScreen() {
   });
 }
 showProductScreen();
-
+updateCartCounter();
