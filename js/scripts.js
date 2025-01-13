@@ -13,7 +13,7 @@ function createProductCard({
   colDiv.className = "col mb-5";
   colDiv.style = "cursor: pointer";  //editar o padding da div por uma margin para ajustar o espaço do click do mouse
   colDiv.onclick = function () {
-    window.location.href = `../product.html?productId=${id}`;
+    window.location.href = `./product.html?productId=${id}`;
   };
 
   const cardDiv = document.createElement("div");
@@ -133,7 +133,7 @@ export function updateCartCounter() {
 /* Buscar produtos e exibir em tela */
 export async function getProducts() {
   try {
-    const response = await fetch('../products.json'); // Faz o fetch do arquivo JSON
+    const response = await fetch('./products.json'); // Faz o fetch do arquivo JSON
     if (!response.ok) {
       throw new Error('Erro ao carregar o arquivo JSON');
     }
@@ -158,6 +158,7 @@ function showProductScreen() {
   .catch(error => {
     console.error("Erro ao carregar os produtos:", error);
   });
+
 }
 showProductScreen();
 updateCartCounter();

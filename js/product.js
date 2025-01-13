@@ -52,7 +52,7 @@ function createProductDetailsWithImage(product) {
   const quantityInput = document.createElement("input");
   quantityInput.className = "form-control text-center me-3";
   quantityInput.id = "inputQuantity";
-  quantityInput.type = "num";
+  quantityInput.type = "number";
   quantityInput.value = "1";
   quantityInput.style.maxWidth = "3rem";
   actionDiv.appendChild(quantityInput);
@@ -119,7 +119,7 @@ const addToCart = (productId) => {
     });
 };
 
-import {updateCartCounter} from "./scripts.js";
+import { updateCartCounter } from "./scripts.js";
 
 import { getProducts } from "./scripts.js"; // Ajuste o caminho de acordo com sua estrutura de pastas
 
